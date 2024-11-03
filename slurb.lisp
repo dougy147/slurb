@@ -1,4 +1,5 @@
 (load "src/spit.lisp")
+(load "src/primes.lisp")
 
 (defun read-whole-file-as-bytes (filename)
   "Read whole file as a byte array."
@@ -22,25 +23,6 @@
 	(setq c (subseq content 0 1))
 	(setq content (subseq content 1 (length content)))
 	collect c))
-
-(defun is-prime (x)
-  (if (< x 2) nil)
-  (loop for i from 2 to (isqrt x) do
-	(when (= (mod x i) 0) (setq x nil) (return)))
-  x)
-
-(defun generate-primes (n)
-  (if (= n 0) '())
-  (if (= n 1) '(2))
-  (setq primes '(2))
-  (setq v 3) ; potential prime
-  (loop while (not (= (length primes) n)) do
-	(when (is-prime v) (nconc primes (list v)))
-	(incf v 2))
-  primes)
-
-(defun get-prime (index primes-list)
-  (nth index primes-list))
 
 ; Dictionnary
 (defun build-dictionnary (char-list primes)
@@ -106,6 +88,7 @@
 
   ; Build primes and dictionnary
   (setq primes (generate-primes (length content)))
+  (setq primes (shuffle-primes primes))
   ;(print primes)
   (setq dict (build-dictionnary content primes))
   ;(loop for k being the hash-key of dict do (print k))
