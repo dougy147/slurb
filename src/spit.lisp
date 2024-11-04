@@ -57,22 +57,22 @@
 			   :direction :output
 			   :if-exists :supersede
 			   :if-does-not-exist :create)
-    (format slurbed "(setq ~a '(" (gethash 'primes *var-names-dict*))
+    (format slurbed "(setf ~a '(" (gethash 'primes *var-names-dict*))
     (loop for i from 0 to (- (length primes) 1) do
 	  (format slurbed "~d " (nth i primes)))
-    (format slurbed "))")
+    (format slurbed ") ")
 
-    (format slurbed "(setq ~a (make-hash-table :test 'equal))" (gethash 'dico *var-names-dict*))
+    (format slurbed "~a (make-hash-table :test 'equal) " (gethash 'dico *var-names-dict*))
     (loop for k being the hash-keys of dict do
 	  (setq c k)
-	  ;(if (string= k #\newline) (progn (setq quotes "\"")   (setq c "\\n")))
 	  (if (string= k #\\) (setq c "\\\\"))
 	  (if (string= k #\") (setq c "\\\""))
-	  ;(if (string= k #\tab) (progn (setq quotes "\"")   (setq c "\\t")))
-	  (format slurbed "(setf (gethash \"~a\" ~a) ~d)" c (gethash 'dico *var-names-dict*) (gethash k dict))
+	  ;(format slurbed "(setf (gethash \"~a\" ~a) ~d)" c (gethash 'dico *var-names-dict*) (gethash k dict))
+	  (format slurbed "(gethash \"~a\" ~a) ~d " c (gethash 'dico *var-names-dict*) (gethash k dict))
 	  )
-    (format slurbed "(setq ~a \"\")" (gethash 'rebuilt *var-names-dict*))
-    (format slurbed "(setq ~a 0)" (gethash 'index *var-names-dict*))
+    (format slurbed "~a \"\" " (gethash 'rebuilt *var-names-dict*))
+    (format slurbed "~a 0" (gethash 'index *var-names-dict*))
+    (format slurbed ")")
     (format slurbed "(loop while (< (length ~a) (length ~a)) do" (gethash 'rebuilt *var-names-dict*) (gethash 'primes *var-names-dict*))
     (format slurbed "(loop for ~a being the hash-keys of ~a do" (gethash 'dico-shortened *var-names-dict*) (gethash 'dico *var-names-dict*))
     (format slurbed "(if (= (mod (gethash ~a ~a) (nth ~a ~a)) 0)" (gethash 'dico-shortened *var-names-dict*) (gethash 'dico *var-names-dict*) (gethash 'index *var-names-dict*) (gethash 'primes *var-names-dict*))
